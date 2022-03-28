@@ -109,3 +109,19 @@ def new_listing(request):
 
     listing.save()
     return HttpResponseRedirect(reverse("index"))
+
+
+def listing(request, listing_id):
+    if request.method == "GET":
+        return render(request, "auctions/listing.html", {
+            "listing" : Listing.objects.get(pk=listing_id),
+            "comments" : Listing.objects.get(pk=listing_id).comments.all(),
+        })
+    
+    elif request.POST["action"] == "comment":
+        content = request.POST["comment"]
+        user = request.user
+
+        new_comment = Comment(user=user, content= content, listing=Listing.objects.get(pk=listing_id))
+        new_comment.save()
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))

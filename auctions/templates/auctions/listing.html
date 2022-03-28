@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+    <div class="listing">
+        <div class="img_container">
+            <img src="{{ listing.image_url }}" alt="Image not available!">
+        </div>
+        <div class="info">
+            <div class="title"> {{listing.title}} </div>
+            <div class="price"><b>Price: ${{listing.price}}</b></div>
+            <div class="description">{{ listing.description }}</div>
+            <div class="publisher">Published by: <b>{{ listing.user }}</b></div>
+        </div>
+    </div>
+    <div class="add_comment">
+        <form action="{% url 'listing' listing.id %}" method="post">
+            {% csrf_token %}
+            <textarea name= "comment" placeholder="Type a comment"></textarea>
+            <input class="comment-button" type="submit" name="action" value="comment">
+        </form>
+    </div>
+
+    {% for comment in comments %}
+        <div class="comment">
+            <p> <b>{{ comment.user.username }}: </b>{{ comment.content }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
