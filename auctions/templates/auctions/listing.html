@@ -10,6 +10,12 @@
             <div class="description">{{ listing.description }}</div>
             <div class="publisher">Published by: <b>{{ listing.user }}</b></div>
         </div>
+        <div class="add_to_watchlist">
+            <form action="{% url 'listing' listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" name="action" value="watchlist">
+            </form>
+        </div>
     </div>
     <div class="add_comment">
         <form action="{% url 'listing' listing.id %}" method="post">

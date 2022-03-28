@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+    {% for listing in listings %}
+        <a href="{% url 'listing' listing.id %}">
+            <div class="listing">
+                <div class="img_container">
+                    <img src="{{ listing.image_url }}" alt="Image not available!">
+                </div>
+                <div class="info">
+                    <div class="title"> {{listing.title}} </div>
+                    <div class="price"><b>Price: ${{listing.price}}</b></div>
+                    <div class="description">{{ listing.description }}</div>
+                    <div class="publisher">Published by: <b>{{ listing.user }}</b></div>
+                </div>
+            </div>
+        </a>
+    {% empty %}
+        <h3>No listings right now!</h3>
+    {% endfor %}
+{% endblock %}
