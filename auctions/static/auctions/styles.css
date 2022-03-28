@@ -1,0 +1,32 @@
+body {
+  padding: 10px;
+}
+.listing {
+  border: 3px solid rgb(71, 70, 70);
+  padding: 10px;
+  margin-bottom: 20px;
+  display: flex;
+}
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.img_container {
+  height: 300px;
+  width: 500px;
+}
+.info {
+  width: 100%;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.title {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+.publisher {
+  margin-top: auto;
+  margin-bottom: 20px;
+}
