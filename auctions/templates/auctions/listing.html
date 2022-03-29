@@ -6,16 +6,27 @@
         </div>
         <div class="info">
             <div class="title"> {{listing.title}} </div>
-            <div class="price"><b>Price: ${{listing.price}}</b></div>
+            <div class="price"><b>Price: ${{ listing.price}}</b></div>
             <div class="description">{{ listing.description }}</div>
             <div class="publisher">Published by: <b>{{ listing.user }}</b></div>
         </div>
-        <div class="add_to_watchlist">
+        <div class="watchlist">
             <form action="{% url 'listing' listing.id %}" method="post">
                 {% csrf_token %}
-                <input type="submit" name="action" value="watchlist">
+                {% if request.user in watchers %}
+                    <input type="submit" name="action" value="watchlist-remove">
+                {% else %}
+                    <input type="submit" name="action" value="watchlist-add">
+                {% endif %}
             </form>
         </div>
+    </div>
+    <div class="bids">
+        <form action="{% url 'listing' listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="number" name="bid" min="{{ listing.price }}">
+            <input type="submit" name="action" value="bid">
+        </form>
     </div>
     <div class="add_comment">
         <form action="{% url 'listing' listing.id %}" method="post">

@@ -119,18 +119,35 @@ def listing(request, listing_id):
         return render(request, "auctions/listing.html", {
             "listing" : Listing.objects.get(pk=listing_id),
             "comments" : Listing.objects.get(pk=listing_id).comments.all(),
+            "watchers" : Listing.objects.get(pk=listing_id).watchers.all(),
         })
     
     elif request.POST["action"] == "comment":
         content = request.POST["comment"]
         user = request.user
-
         new_comment = Comment(user=user, content= content, listing=Listing.objects.get(pk=listing_id))
         new_comment.save()
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-    elif request.POST["action"] == "watchlist":
+
+    elif request.POST["action"] == "watchlist-add":
         Listing.objects.get(pk=listing_id).watchers.add(request.user)
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+        
+    elif request.POST["action"] == "watchlist-remove":
+        Listing.objects.get(pk=listing_id).watchers.remove(request.user)
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+    
+    elif request.POST["action"] == "bid":
+        bid= Bid(user=request.user, price=int(request.POST["bid"]), listing=Listing.objects.get(pk=listing_id))
+        bid.save()
+
+        current_listing = Listing.objects.get(pk=listing_id)
+        current_listing.price = int(request.POST["bid"])
+        current_listing.save()
+        
+        return HttpResponseRedirect(reverse("listing", args=(listing_id, )))
+
+
 
 
 def watchlist(request):
