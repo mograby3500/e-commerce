@@ -1,5 +1,5 @@
 # e-commerce
-eBay-like e-commerce auction site built using that allows users to:
+eBay-like e-commerce auction site that allows users to:
 
 - Post auction listings
 - Place bids on listings
