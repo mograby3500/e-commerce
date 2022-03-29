@@ -10,17 +10,20 @@
             <div class="description">{{ listing.description }}</div>
             <div class="publisher">Published by: <b>{{ listing.user }}</b></div>
         </div>
-        <div class="watchlist">
-            <form action="{% url 'listing' listing.id %}" method="post">
-                {% csrf_token %}
-                {% if request.user in watchers %}
-                <input type="submit" name="action" value="watchlist-remove">
-                {% else %}
-                <input type="submit" name="action" value="watchlist-add">
-                {% endif %}
-            </form>
-        </div>
-        {% if listing.active and listing.user == request.user%}
+        {% if user.is_authenticated %}
+            <div class="watchlist">
+                <form action="{% url 'listing' listing.id %}" method="post">
+                    {% csrf_token %}
+                    {% if request.user in watchers %}
+                    <input type="submit" name="action" value="watchlist-remove">
+                    {% else %}
+                    <input type="submit" name="action" value="watchlist-add">
+                    {% endif %}
+                </form>
+            </div>
+        {% endif %}
+
+        {% if listing.active and listing.user == request.user %}
             <div class="watchlist">
                 <form action="{% url 'listing' listing.id %}" method="post" >
                     {% csrf_token %}
@@ -38,22 +41,22 @@
                     <input type="submit" name="action" value="bid">
                 </form>
             </div>
+            <div class="add_comment">
+                <form action="{% url 'listing' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <textarea name= "comment" placeholder="Type a comment"></textarea>
+                    <input class="comment-button" type="submit" name="action" value="comment">
+                </form>
+            </div>
         {% endif %}
     {% else %}
         <h1>This Item has been sold to {{ listing.winner }}</h1>
     {% endif %}
-    <div class="add_comment">
-        <form action="{% url 'listing' listing.id %}" method="post">
-            {% csrf_token %}
-            <textarea name= "comment" placeholder="Type a comment"></textarea>
-            <input class="comment-button" type="submit" name="action" value="comment">
-        </form>
-    </div>
 
+    <div class="comment">
     <h1>Comments</h1>
-    {% for comment in comments %}
-        <div class="comment">
-            <p> <b>{{ comment.user.username }}: </b>{{ comment.content }}</p>
-        </div>
-    {% endfor %}
+            {% for comment in comments %}
+                <p> <b>{{ comment.user.username }}: </b>{{ comment.content }}</p>
+            {% endfor %}
+    </div>
 {% endblock %}

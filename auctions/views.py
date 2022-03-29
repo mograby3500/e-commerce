@@ -112,7 +112,7 @@ def new_listing(request):
         description=description, 
         price= price,
         image_url= image_url,
-        winner=request.user.id
+        winner=request.user.username
         )
 
     listing.save()
@@ -157,6 +157,7 @@ def listing(request, listing_id):
         return HttpResponseRedirect(reverse("listing", args=(listing_id, )))
 
     elif request.POST["action"] == "close auction":
+        winner = current_listing.user.username
         for bid  in current_listing.bids.all():
             if bid.price == current_listing.price:
                 winner = bid.user.username
