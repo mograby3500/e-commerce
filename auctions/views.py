@@ -32,9 +32,13 @@ class NewListingForm(forms.Form):
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "listings" : Listing.objects.all(),
+        "active_listings" : Listing.objects.all().filter(active=True),
     })
 
+def inactive(request):
+    return render(request, "auctions/inactive.html", {
+        "inactive_listings": Listing.objects.all().filter(active=False),
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -108,6 +112,7 @@ def new_listing(request):
         description=description, 
         price= price,
         image_url= image_url,
+        winner=request.user.id
         )
 
     listing.save()
@@ -115,11 +120,17 @@ def new_listing(request):
 
 
 def listing(request, listing_id):
+    current_listing = Listing.objects.get(pk=listing_id)
     if request.method == "GET":
+        min_bid = current_listing.price
+        for bid in current_listing.bids.all():
+            min_bid = max(min_bid, bid.price + 1)
+
         return render(request, "auctions/listing.html", {
             "listing" : Listing.objects.get(pk=listing_id),
             "comments" : Listing.objects.get(pk=listing_id).comments.all(),
             "watchers" : Listing.objects.get(pk=listing_id).watchers.all(),
+            "min_bid" : min_bid,
         })
     
     elif request.POST["action"] == "comment":
@@ -141,12 +152,20 @@ def listing(request, listing_id):
         bid= Bid(user=request.user, price=int(request.POST["bid"]), listing=Listing.objects.get(pk=listing_id))
         bid.save()
 
-        current_listing = Listing.objects.get(pk=listing_id)
         current_listing.price = int(request.POST["bid"])
         current_listing.save()
-        
         return HttpResponseRedirect(reverse("listing", args=(listing_id, )))
 
+    elif request.POST["action"] == "close auction":
+        for bid  in current_listing.bids.all():
+            if bid.price == current_listing.price:
+                winner = bid.user.username
+
+        current_listing.active= False
+        current_listing.winner = winner
+        current_listing.save()
+
+        return HttpResponseRedirect(reverse("index"))
 
 
 

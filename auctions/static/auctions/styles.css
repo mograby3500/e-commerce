@@ -53,3 +53,12 @@ img {
   padding: 10px;
   margin-bottom: 20px;
 }
+
+.bids {
+  border: 1px solid rgb(71, 70, 70);
+  margin-bottom: 20px;
+  padding: 10px;
+}
+.watchlist {
+  margin: 5px;
+}

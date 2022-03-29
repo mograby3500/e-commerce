@@ -14,20 +14,34 @@
             <form action="{% url 'listing' listing.id %}" method="post">
                 {% csrf_token %}
                 {% if request.user in watchers %}
-                    <input type="submit" name="action" value="watchlist-remove">
+                <input type="submit" name="action" value="watchlist-remove">
                 {% else %}
-                    <input type="submit" name="action" value="watchlist-add">
+                <input type="submit" name="action" value="watchlist-add">
                 {% endif %}
             </form>
         </div>
+        {% if listing.active and listing.user == request.user%}
+            <div class="watchlist">
+                <form action="{% url 'listing' listing.id %}" method="post" >
+                    {% csrf_token %}
+                    <input type="submit" name="action" value="close auction">
+                </form>
+            </div>
+        {% endif %}
     </div>
-    <div class="bids">
-        <form action="{% url 'listing' listing.id %}" method="post">
-            {% csrf_token %}
-            <input type="number" name="bid" min="{{ listing.price }}">
-            <input type="submit" name="action" value="bid">
-        </form>
-    </div>
+    {% if listing.active %}
+        {% if user.is_authenticated %}
+            <div class="bids">
+                <form action="{% url 'listing' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="number" name="bid" min="{{ min_bid }}">
+                    <input type="submit" name="action" value="bid">
+                </form>
+            </div>
+        {% endif %}
+    {% else %}
+        <h1>This Item has been sold to {{ listing.winner }}</h1>
+    {% endif %}
     <div class="add_comment">
         <form action="{% url 'listing' listing.id %}" method="post">
             {% csrf_token %}
@@ -36,6 +50,7 @@
         </form>
     </div>
 
+    <h1>Comments</h1>
     {% for comment in comments %}
         <div class="comment">
             <p> <b>{{ comment.user.username }}: </b>{{ comment.content }}</p>

@@ -14,6 +14,8 @@ class Listing(models.Model):
     price = models.IntegerField()
     watchers = models.ManyToManyField(User, blank=True, related_name="watchlist")
     image_url = models.URLField()
+    active = models.BooleanField(default=True)
+    winner = models.CharField(max_length=64, default="")
 
     def __str__(self):
         return f"{self.title} ({self.id})"
