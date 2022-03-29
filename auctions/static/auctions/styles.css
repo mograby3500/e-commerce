@@ -62,3 +62,19 @@ img {
 .watchlist {
   margin: 5px;
 }
+
+body {
+  background-color: rgb(136, 134, 139);
+}
+.global {
+  font-family: "Merriweather";
+  width: 100%;
+  height: 100%;
+  min-height: 1000px;
+  background-color: rgb(255, 255, 255);
+  padding: 40px;
+  align-self: center;
+}
+a:hover {
+  text-decoration: none;
+}

@@ -1,4 +1,5 @@
 {% extends "auctions/layout.html" %}
+{% block title %} Watchlist {% endblock %}
 {% block body %}
     {% for listing in listings %}
         <a href="{% url 'listing' listing.id %}">
