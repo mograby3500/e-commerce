@@ -5,7 +5,8 @@ eBay-like e-commerce auction site that allows users to:
 - Place bids on listings
 - Comment on those listings
 - Add listings to a “watchlist.
-
+# Framework:
+Django
 # Specification
 ## Models:
 The application has three models in addition to the User model: 
@@ -34,7 +35,3 @@ Users who are signed in will be able to visit a Watchlist page, which should dis
 ## Django Admin Interface: 
 Via the Django admin interface, a site administrator should be able to view, add, edit, and delete any listings, comments, and bids made on the site.
 
-# Framework:
-Django
-# Languages
-HTML, CSS, Python and Django template language
